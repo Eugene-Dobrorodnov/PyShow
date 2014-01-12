@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load pool_category %}
+
+{% block static %}
+    {{ block.super }}
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'showcase/css/main.css' %}" >
+{% endblock %}
+
+{% block main %}
+<div id="showcase_app">
+    <div class="left_bar">
+        {% block category_list %}
+            {% show_cat request.path %}
+        {% endblock %}
+    </div>
+
+    <div class="content">
+        {% block content %}
+            <div id="item-list">
+                {% for item in object_list %}
+                    <div class="item-box" id="id_{{item.id}}">
+                        <a href="{% url 'showcase:detail' item.id %}">{{ item.title }}</a> ( {{ item.description }} )
+                    </div>
+                {% endfor %}
+            </div>
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

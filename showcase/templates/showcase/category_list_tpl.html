@@ -1,0 +1,22 @@
+<ul>
+    {% for item in category %}
+        <li><a class="{% if request_url.2 == item.alias %}active{% endif %}"
+               href="{% url 'showcase:index_cat' item.alias %}" >{{item.title}}</a>
+        </li>
+        {% if request_url.2 and request_url.2 == item.alias %}
+            {% for sub_item in sub_category %}
+                {% if forloop.counter == 1 %}
+                    <ul>
+                {% endif %}
+
+                {% if sub_item.category_id == item.id %}
+                    <li><a href="{% url 'showcase:index_cat_sub' item.alias sub_item.alias %}">{{sub_item.title}}</a></li>
+                {% endif %}
+
+                {% if forloop.counter == sub_category.count %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+</ul>
