@@ -11,6 +11,12 @@
 
 <div id="header">
     {% block header %}
+        {% if request.user.is_authenticated %}
+            {{ request.user }}
+            <a href="#">Корзина</a>
+        {% else %}
+            <a href="{% url 'user:login' %}">Войти</a>
+        {% endif %}
     {% endblock %}
 </div>
 
