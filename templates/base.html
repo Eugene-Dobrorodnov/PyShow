@@ -5,33 +5,53 @@
     {% block static %}
         {% load staticfiles %}
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <script src="{% static 'js/jquery.js' %}"></script>
+        <script src="{% static 'js/main.js' %}"></script>
     {% endblock %}
 </head>
 <body>
 
 <div id="header">
-    {% block header %}
-        {% if request.user.is_authenticated %}
-            {{ request.user }}
-            <a href="#">Корзина</a>
-        {% else %}
-            <a href="{% url 'user:login' %}">Войти</a>
-        {% endif %}
-    {% endblock %}
+    <div class="conteiner">
+        {% block header %}
+            {% if request.user.is_authenticated %}
+                <div id="basket"><a href="#">Корзина</a></div>
+                <div id="user_menu">
+                    <a href="#">{{ request.user }}</a>
+                    <div class="dropdown">
+                        <ul>
+                            <li><a href="#">Мои заказы</a></li>
+                            <li><a href="#">Мой профиль</a></li>
+                            <li><a href="{% url 'user:logout' %}">Выход</a></li>
+                        </ul>
+                    </div>
+                </div>
+            {% else %}
+                <a href="#dialog" id="enter_btn" name="modal">Войти</a>
+                <div id="boxes">
+                    <div id="dialog" class="window">
+                        {% load form_auth %}
+                        <div class="top"><a href="#" class="link close"/>Закрыть</a></div>
+                        <div class="content">{% show_forms %}</div>
+                    </div>
+                </div>
+                <div id="mask"></div>
+            {% endif %}
+        {% endblock %}
+
+        <!--div id="navigation">
+            {% block navigation %}
+            <ul>
+               <li><a href="/showcase">Showcase</a></li>
+               <li><a href="/showcase">About</a></li>
+               <li><a href="/showcase">Contact</a></li>
+            </ul>
+            {% endblock %}
+        </div-->
+    </div>
 </div>
 
 <div id="wrapper">
-    <div id="navigation">
-        {% block navigation %}
-        <ul>
-           <li><a href="/showcase">Showcase</a></li>
-           <li><a href="/showcase">About</a></li>
-           <li><a href="/showcase">Contact</a></li>
-        </ul>
-        {% endblock %}
-    </div>
-
-    <div id="main">
         {% block main %}
         {% endblock %}
     </div>
@@ -41,5 +61,9 @@
     {% block footer %}
     {% endblock %}
 </div>
+
+
+
+
 </body>
 </html>

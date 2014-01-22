@@ -1,0 +1,19 @@
+<div id="auth_box">
+    <div class="auth_block_left">
+        <form id="login_form" action="{% url 'user:login' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="username">
+            <input type="password" name="password">
+            <input  type="submit" value="Вход">
+        </form>
+    </div>
+    <div class="auth_block_right">
+        <form id="registration_form" action="{% url 'user:signup' %}" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div>{{ field }}</div>
+            {% endfor %}
+            <input type="submit" value="Зарегистрироваться">
+        </form>
+    </div>
+</div>
