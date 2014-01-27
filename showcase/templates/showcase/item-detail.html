@@ -1,11 +1,39 @@
 {% extends "showcase/item-list.html" %}
+{% load staticfiles %}
 
 {% block title %}
     {{ item.title }}
 {% endblock %}
 
+{% block category_list %}
+        <a href="{% url 'showcase:index_cat'                       category.slug %}">{{ category.title }}</a>
+        <a href="{% url 'showcase:index_cat_sub' category.slug sub_category.slug %}">{{ sub_category.title }}</a>
+{% endblock %}
+
 {% block content %}
     <div id="detail-item">
         <h2>{{ item.title }}</h2>
+
+        <img src="{% static 'showcase/img/no_item.jpg' %}">
+
+        Price: ${{ item.price }}
+        <h3>Отзывы:</h3>
+        <form action="{% url 'showcase:add_comment' %}" id="create_comment_form" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="item" value="{{ item.id }}">
+            <textarea name="body"></textarea>
+            <input type="submit" value="Отправить">
+        </form>
+
+        <div id="comments_list">
+        {% for comment in comments_list %}
+            <div class="comment_box">
+                <span>{{ comment.create_date }}</span>
+                <p>{{ comment.body }}</p>
+            </div>
+            {% empty %}
+            <span class="comment_empty">Пока нет отзывов</span>
+        {% endfor %}
+        </div>
     </div>
 {% endblock %}

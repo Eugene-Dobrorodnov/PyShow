@@ -5,6 +5,7 @@
     {{ block.super }}
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'showcase/css/main.css' %}" >
+    <script src="{% static 'showcase/js/showcase.js' %}"></script>
 {% endblock %}
 
 {% block main %}
@@ -20,8 +21,14 @@
             <div id="item-list">
                 {% for item in object_list %}
                     <div class="item-box" id="id_{{item.id}}">
-                        <a href="{% url 'showcase:detail' item.id %}">{{ item.title }}</a> ( {{ item.description }} )
+                        <a href="{% url 'showcase:detail' item.slug %}">{{ item.title }}</a>
+                        <a href="{% url 'showcase:detail' item.slug %}">
+                            <img src="{% static 'showcase/img/no_item.jpg' %}">
+                        </a>
+                        <div><a href="#">В корзину</a> ${{ item.price }}</div>
                     </div>
+                {% empty %}
+                    В этой категории пока нет товаров
                 {% endfor %}
             </div>
         {% endblock %}
