@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <div id="cart_list">
+    {% for key, value in list.item_list.items %}
+        {% if forloop.first %}
+            <table>
+                <tr>
+                    <th>Товар</th>
+                    <th>Цена</th>
+                    <th></th>
+                </tr>
+        {% endif %}
+            <tr class="cart_item">
+                <td>
+                    <h3><a href="{% url 'showcase:detail' value.slug %}">{{ value.name }}</a></h3>
+                </td>
+                <td>{{ value.price }}</td>
+                <td>
+                    <button id="item_{{key}}" class="del_from_cart">Убрать из корзины</button>
+                </td>
+            </tr>
+        {% if forloop.last %}
+            <tr>
+                <td id="total_sum" colspan="3">
+                   Общая сумма: {{ list.total_price }}
+                </td>
+            </tr>
+            </table>
+        {% endif %}
+    {% empty %}
+        Корзтна пуста!
+    {% endfor %}
+    </div>
+{% endblock %}

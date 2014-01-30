@@ -60,6 +60,11 @@ body{
     color: #ccc;
     text-decoration: none;
 }
+
+#basket span{
+    color: #fff;
+}
+
 #navigation{
     position: relative;
     overflow: hidden;

@@ -25,7 +25,10 @@
                         <a href="{% url 'showcase:detail' item.slug %}">
                             <img src="{% static 'showcase/img/no_item.jpg' %}">
                         </a>
-                        <div><a href="#">В корзину</a> ${{ item.price }}</div>
+                        {% if item.id|make_list in request.session.user_cart.item_list %}
+                            {{request.session.user_cart.item_list}}
+                        {% endif %}
+                        <div><button id="item_{{item.id}}" class="add_to_cart">В корзину</button> ${{ item.price }}</div>
                     </div>
                 {% empty %}
                     В этой категории пока нет товаров

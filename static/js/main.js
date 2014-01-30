@@ -133,4 +133,78 @@ $(document).ready(function() {
         });
         return false;
     });
+
+    //Добавить товар в корзину
+    $('#item-list').on('click', '.item-box button.add_to_cart', function(){
+        var str_id  = $(this).attr('id').split('_')
+        var item_id = parseInt(str_id[1])
+
+        if(!item_id){
+            return false;
+        }
+
+        $.ajax({
+            async:false,
+            type:"POST",
+            url:'/cart/item/'+item_id,
+            data:{
+                id : item_id,
+                csrfmiddlewaretoken : getCookie('csrftoken'), // Это вообще обязательно?
+            },
+            cache:false,
+            success:function(data){
+                var data = jQuery.parseJSON(data);
+
+                if(data.status == 'ok'){
+                    $('#basket span').html( '(' + data.total_count + ')' )
+                }else{
+                    alert(data.status);
+                    return false;
+                }
+            },
+            error: function(){
+                alert('Exception!')
+            }
+        });
+        return false;
+    });
+
+    //Удалить товар из корзины
+    $('#cart_list').on('click', 'button.del_from_cart', function(){
+        var str_id  = $(this).attr('id').split('_')
+        var item_id = parseInt(str_id[1])
+
+        if(!item_id){
+            return false;
+        }
+
+        $.ajax({
+            async:false,
+            type:"DELETE",
+            url:'/cart/item/'+item_id,
+            data:{
+                id : item_id,
+                csrfmiddlewaretoken : getCookie('csrftoken'),
+            },
+            cache:false,
+            success:function(data){
+                var data = jQuery.parseJSON(data);
+                console.log(data);
+                if(data.status == 'ok'){
+                    $('td#total_sum').html('Общая сумма: ' + parseFloat(data.total_price))
+                    $('button#item_'+item_id).parents('tr').remove()
+                    $('#basket span').html( '(' + data.total_count + ')' )
+
+                    if( $('#cart_list table tr.cart_item').length == 0 ){
+                        $('#cart_list').html('Корзтна пуста!')
+                    }
+                }
+
+            },
+            error: function(){
+                alert('Exception!')
+            }
+        });
+        return false;
+    });
 });
