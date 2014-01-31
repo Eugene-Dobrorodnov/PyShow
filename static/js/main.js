@@ -79,11 +79,13 @@ $(document).ready(function() {
     //Регистрация пользователя
     $('#registration_form input[type="submit"]').click(function(){
         var user_name  = $.trim($(this).parent('form').find('input[name="username"]').val());
+        var email      = $.trim($(this).parent('form').find('input[name="email"]').val());
         var password1  = $.trim($(this).parent('form').find('input[name="password1"]').val());
         var password2  = $.trim($(this).parent('form').find('input[name="password2"]').val());
         var action     = $(this).parent('form').attr('action')
 
-        if(!user_name && !password1 && !password2){
+        if(!user_name && !password1 && !password2 && !email){
+            $('#registration_form input[name="email"]').addClass('error');
             $('#registration_form input[name="username"]').addClass('error');
             $('#registration_form input[name="password1"]').addClass('error');
             $('#registration_form input[name="password2"]').addClass('error');
@@ -106,6 +108,7 @@ $(document).ready(function() {
             url:action,
             data:{
                 username  : user_name,
+                email     : email,
                 password1 : password1,
                 password2 : password2,
             },
