@@ -15,12 +15,15 @@
     <div class="conteiner">
         {% block header %}
             {% if request.user.is_authenticated %}
-                <div id="basket"><a href="#">Корзина</a></div>
+                <div id="basket">
+                    <a href="{% url 'cart:index' %}">Корзина</a>
+                    <span>({{ request.session.user_cart.total_count}})</span>
+                </div>
                 <div id="user_menu">
                     <a href="#">{{ request.user }}</a>
                     <div class="dropdown">
                         <ul>
-                            <li><a href="#">Мои заказы</a></li>
+                            <li><a href="{% url 'cart:show' %}">Мои заказы</a></li>
                             <li><a href="#">Мой профиль</a></li>
                             <li><a href="{% url 'user:logout' %}">Выход</a></li>
                         </ul>
@@ -39,7 +42,7 @@
             {% endif %}
         {% endblock %}
 
-        <!--div id="navigation">
+        <div id="navigation">
             {% block navigation %}
             <ul>
                <li><a href="/showcase">Showcase</a></li>
@@ -47,7 +50,7 @@
                <li><a href="/showcase">Contact</a></li>
             </ul>
             {% endblock %}
-        </div-->
+        </div>
     </div>
 </div>
 

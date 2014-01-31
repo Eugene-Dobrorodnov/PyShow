@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <div id="order_list">
+    {% for order in order_list %}
+        {% if forloop.first %}
+            <table>
+                <tr>
+                    <th>Товар</th>
+                    <th>Цена</th>
+                    <th>Дата оформления</th>
+                </tr>
+        {% endif %}
+            <tr class="cart_item">
+                <td>
+                    <h3><a href="{% url 'showcase:detail' order.item_id.slug %}">{{ order.item_id.title }}</a></h3>
+                </td>
+                <td>{{ order.item_id.price }}</td>
+                <td>
+                    {{ order.create_date }}
+                </td>
+            </tr>
+        {% if forloop.last %}
+
+            </table>
+
+        {% endif %}
+    {% empty %}
+        Заказаов пока нет!
+    {% endfor %}
+    </div>
+{% endblock %}

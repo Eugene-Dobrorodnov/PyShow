@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'showcase',
     'users',
+    'cart',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

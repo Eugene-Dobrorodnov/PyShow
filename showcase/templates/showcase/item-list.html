@@ -25,7 +25,7 @@
                         <a href="{% url 'showcase:detail' item.slug %}">
                             <img src="{% static 'showcase/img/no_item.jpg' %}">
                         </a>
-                        <div><a href="#">В корзину</a> ${{ item.price }}</div>
+                        <div><button id="item_{{item.id}}" class="add_to_cart">В корзину</button> ${{ item.price }}</div>
                     </div>
                 {% empty %}
                     В этой категории пока нет товаров

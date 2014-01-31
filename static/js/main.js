@@ -79,11 +79,13 @@ $(document).ready(function() {
     //Регистрация пользователя
     $('#registration_form input[type="submit"]').click(function(){
         var user_name  = $.trim($(this).parent('form').find('input[name="username"]').val());
+        var email      = $.trim($(this).parent('form').find('input[name="email"]').val());
         var password1  = $.trim($(this).parent('form').find('input[name="password1"]').val());
         var password2  = $.trim($(this).parent('form').find('input[name="password2"]').val());
         var action     = $(this).parent('form').attr('action')
 
-        if(!user_name && !password1 && !password2){
+        if(!user_name && !password1 && !password2 && !email){
+            $('#registration_form input[name="email"]').addClass('error');
             $('#registration_form input[name="username"]').addClass('error');
             $('#registration_form input[name="password1"]').addClass('error');
             $('#registration_form input[name="password2"]').addClass('error');
@@ -106,6 +108,7 @@ $(document).ready(function() {
             url:action,
             data:{
                 username  : user_name,
+                email     : email,
                 password1 : password1,
                 password2 : password2,
             },
@@ -129,6 +132,80 @@ $(document).ready(function() {
 
                     });
                 }
+            }
+        });
+        return false;
+    });
+
+    //Добавить товар в корзину
+    $('#item-list').on('click', '.item-box button.add_to_cart', function(){
+        var str_id  = $(this).attr('id').split('_')
+        var item_id = parseInt(str_id[1])
+
+        if(!item_id){
+            return false;
+        }
+
+        $.ajax({
+            async:false,
+            type:"POST",
+            url:'/cart/item/'+item_id,
+            data:{
+                id : item_id,
+                csrfmiddlewaretoken : getCookie('csrftoken'), // Это вообще обязательно?
+            },
+            cache:false,
+            success:function(data){
+                var data = jQuery.parseJSON(data);
+
+                if(data.status == 'ok'){
+                    $('#basket span').html( '(' + data.total_count + ')' )
+                }else{
+                    alert(data.status);
+                    return false;
+                }
+            },
+            error: function(){
+                alert('Exception!')
+            }
+        });
+        return false;
+    });
+
+    //Удалить товар из корзины
+    $('#cart_list').on('click', 'button.del_from_cart', function(){
+        var str_id  = $(this).attr('id').split('_')
+        var item_id = parseInt(str_id[1])
+
+        if(!item_id){
+            return false;
+        }
+
+        $.ajax({
+            async:false,
+            type:"DELETE",
+            url:'/cart/item/'+item_id,
+            data:{
+                id : item_id,
+                csrfmiddlewaretoken : getCookie('csrftoken'),
+            },
+            cache:false,
+            success:function(data){
+                var data = jQuery.parseJSON(data);
+                console.log(data);
+                if(data.status == 'ok'){
+                    $('td#total_sum').html('Общая сумма: ' + parseFloat(data.total_price))
+                    $('button#item_'+item_id).parents('tr').remove()
+                    $('#basket span').html( '(' + data.total_count + ')' )
+
+                    if( $('#cart_list table tr.cart_item').length == 0 ){
+                        $('#cart_list').html('Корзтна пуста!')
+                    }
+                }
+
+            },
+            error: function(){
+                alert('Exception!')
             }
         });
         return false;

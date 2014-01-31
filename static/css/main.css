@@ -60,6 +60,11 @@ body{
     color: #ccc;
     text-decoration: none;
 }
+
+#basket span{
+    color: #fff;
+}
+
 #navigation{
     position: relative;
     overflow: hidden;
@@ -123,7 +128,7 @@ body{
 
 #boxes #dialog {
     width: 620px;
-    height:230px;
+    height:280px;
     padding:10px;
     background-color:#ffffff;
     padding: 37px 20px 40px 20px;
