@@ -2,7 +2,9 @@
 from django.shortcuts     import render, get_object_or_404
 from django.http          import HttpResponse, HttpRequest, Http404
 from django.views.generic import View
+from django.utils         import timezone
 from django.views.decorators.csrf import csrf_exempt
+from cart.models          import Oreders
 from decimal import Decimal
 import json
 
@@ -105,3 +107,38 @@ class Cart(View):
         request.session['user_cart'] = self.cart_list
 
         return HttpResponse(msg)
+
+def check_orders(request):
+
+    if not request.user.is_authenticated():
+        return HttpResponse('Need User!')
+
+    if not request.session.get('user_cart'):
+        raise Http404
+
+    obj_list  = []
+    item_list = request.session['user_cart']['item_list']
+
+    if not item_list:
+        return HttpResponse('none')
+
+    for key in item_list:
+        item = Oreders(
+            item_id     = Item.objects.get(id = key), #А вот это очень плохой тон...
+            user_id     = request.user,
+            create_date = timezone.now(),
+        )
+        obj_list.append(item)
+
+    Oreders.objects.bulk_create(obj_list)
+    del request.session['user_cart']
+    return HttpResponse('Заказ оформлен!')
+
+
+def show_orders(request):
+
+    if not request.user.is_authenticated():
+        return HttpResponse('Need User!')
+
+    order_list = Oreders.objects.filter(user_id = request.user)
+    return render(request, 'cart/order-list.html', {'order_list':order_list})

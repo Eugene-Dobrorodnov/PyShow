@@ -23,7 +23,7 @@
                     <a href="#">{{ request.user }}</a>
                     <div class="dropdown">
                         <ul>
-                            <li><a href="#">Мои заказы</a></li>
+                            <li><a href="{% url 'cart:show' %}">Мои заказы</a></li>
                             <li><a href="#">Мой профиль</a></li>
                             <li><a href="{% url 'user:logout' %}">Выход</a></li>
                         </ul>
